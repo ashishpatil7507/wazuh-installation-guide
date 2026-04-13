@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Wazuh Ultimate Installation Guide – Ashish Patil | SIEM/XDR</title>
+  <!-- Google Material Icons + Fonts -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a12;
+      color: #eef2f8;
+      line-height: 1.5;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    /* Animated, multi-layered background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 40%, #0f0f1a, #030308);
+      z-index: -3;
+      animation: slowShift 20s ease infinite alternate;
+    }
+    @keyframes slowShift {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+    /* Floating particles animation */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -2;
+      background-image: 
+        radial-gradient(2px 2px at 20% 30%, rgba(214,69,69,0.15) 2px, transparent 2px),
+        radial-gradient(3px 3px at 70% 80%, rgba(44,110,158,0.1) 3px, transparent 3px),
+        radial-gradient(1px 1px at 40% 50%, rgba(230,160,23,0.2) 1px, transparent 1px);
+      background-size: 50px 50px, 80px 80px, 30px 30px;
+      animation: particleFloat 30s linear infinite;
+    }
+    @keyframes particleFloat {
+      0% { background-position: 0 0, 0 0, 0 0; }
+      100% { background-position: 100px 100px, 200px 150px, 50px 60px; }
+    }
+    /* Animated glow overlay */
+    .glow-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(45deg, rgba(30,30,50,0.05) 0px, rgba(30,30,50,0.05) 2px, transparent 2px, transparent 8px);
+      pointer-events: none;
+      z-index: -1;
+      animation: subtlePulse 6s infinite alternate;
+    }
+    @keyframes subtlePulse {
+      0% { opacity: 0.3; }
+      100% { opacity: 0.7; }
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    /* Hero Section with fade-in */
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, #d64545);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      animation: textGlow 3s infinite alternate;
+    }
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 0px rgba(214,69,69,0); }
+      100% { text-shadow: 0 0 15px rgba(214,69,69,0.5); }
+    }
+    .hero .tagline {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+    }
+    .badge-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .badge {
+      background: #d64545;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      animation: badgePulse 2s infinite;
+    }
+    .badge:hover {
+      transform: scale(1.05);
+      background: #b32d2d;
+      box-shadow: 0 0 15px rgba(214,69,69,0.5);
+    }
+    @keyframes badgePulse {
+      0% { box-shadow: 0 0 0 0 rgba(214,69,69,0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(214,69,69,0); }
+      100% { box-shadow: 0 0 0 0 rgba(214,69,69,0); }
+    }
+    /* Profile section */
+    .profile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: rgba(10, 10, 18, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 2rem;
+      padding: 0.8rem 1.5rem;
+      width: fit-content;
+      margin: 0 auto 2rem auto;
+      border: 1px solid rgba(214, 69, 69, 0.3);
+      transition: all 0.3s;
+      animation: float 4s ease-in-out infinite;
+    }
+    .profile:hover {
+      transform: translateY(-5px);
+      border-color: #d64545;
+      box-shadow: 0 0 25px rgba(214,69,69,0.3);
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+    .profile-img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #d64545;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .profile-img:hover {
+      transform: scale(1.05) rotate(2deg);
+      box-shadow: 0 0 20px #d64545;
+    }
+    .profile-info h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .profile-info p {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+    /* Charts row */
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .chart-card {
+      background: #14141f;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      border: 1px solid #2a2a3a;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.3s;
+      animation: cardGlow 4s infinite alternate;
+    }
+    .chart-card:hover {
+      transform: translateY(-8px);
+      border-color: #d64545;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.5), 0 0 15px rgba(214,69,69,0.2);
+    }
+    @keyframes cardGlow {
+      0% { box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+      100% { box-shadow: 0 8px 25px rgba(214,69,69,0.1); }
+    }
+    .chart-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #2a2a3a;
+      padding-bottom: 0.5rem;
+    }
+    .cost-text {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      background: #0a0a12;
+      padding: 0.6rem;
+      border-radius: 1rem;
+      font-weight: 500;
+      animation: fadeInUp 0.6s;
+    }
+    /* Section headlines with underline animation */
+    .section-headline {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 5px solid;
+      padding-left: 1rem;
+      transition: transform 0.2s;
+    }
+    .section-headline:hover {
+      transform: translateX(8px);
+    }
+    .headline-windows { border-left-color: #2c6e9e; color: #2c6e9e; }
+    .headline-linux { border-left-color: #d64545; color: #d64545; }
+    .headline-teal { border-left-color: #2c9e6e; color: #2c9e6e; }
+    .headline-amber { border-left-color: #e6a017; color: #e6a017; }
+    /* Grid for cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: #14141f;
+      border-radius: 1.5rem;
+      padding: 1.3rem;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: 1px solid #2a2a3a;
+      display: flex;
+      flex-direction: column;
+      animation: cardFadeIn 0.5s ease-out;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 20px 35px rgba(0,0,0,0.5), 0 0 0 1px rgba(214,69,69,0.3);
+      border-color: rgba(214,69,69,0.5);
+    }
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1rem;
+      transition: all 0.2s;
+    }
+    .card-header .material-icons { 
+      font-size: 26px;
+      transition: transform 0.2s;
+    }
+    .card:hover .card-header .material-icons {
+      transform: scale(1.1);
+    }
+    .card-windows .card-header { border-bottom-color: #2c6e9e; }
+    .card-windows .card-header .material-icons { color: #2c6e9e; }
+    .card-linux .card-header { border-bottom-color: #d64545; }
+    .card-linux .card-header .material-icons { color: #d64545; }
+    .card-teal .card-header { border-bottom-color: #2c9e6e; }
+    .card-teal .card-header .material-icons { color: #2c9e6e; }
+    .card-amber .card-header { border-bottom-color: #e6a017; }
+    .card-amber .card-header .material-icons { color: #e6a017; }
+    /* Command blocks with pulse on hover */
+    .cmd {
+      background: #0a0a12;
+      border-radius: 0.8rem;
+      margin: 0.7rem 0;
+      padding: 0.6rem 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid #2a2a3a;
+      animation: cmdFadeIn 0.4s ease-out backwards;
+    }
+    .cmd:hover {
+      background: #2a1a1a;
+      border-left-color: #d64545;
+      transform: scale(0.99) translateX(4px);
+      box-shadow: 0 0 8px rgba(214,69,69,0.3);
+    }
+    @keyframes cmdFadeIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .cmd-desc {
+      font-size: 0.7rem;
+      color: #a0a0c0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0a0a12;
+      border: 1px solid #2c6e9e;
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: white;
+      text-decoration: none;
+      margin: 0.5rem 0;
+      width: fit-content;
+      transition: all 0.3s;
+    }
+    .btn-download:hover {
+      background: #2c6e9e;
+      transform: scale(1.02);
+      box-shadow: 0 0 12px #2c6e9e;
+    }
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0a0a12;
+      margin-top: 0.5rem;
+      transition: all 0.3s;
+    }
+    th, td {
+      border: 1px solid #2a2a3a;
+      padding: 0.6rem;
+      text-align: left;
+      transition: background 0.2s;
+    }
+    tr:hover td {
+      background: #1a1a2a;
+    }
+    th { background: #1a1a2a; }
+    a { color: #d64545; text-decoration: none; transition: text-shadow 0.2s; }
+    a:hover { text-shadow: 0 0 5px #d64545; }
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #d64545;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2000;
+      animation: fadeSlideUp 0.2s, fadeOut 1.8s forwards 0.3s;
+      pointer-events: none;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      opacity: 0.7;
+      border-top: 1px solid #2a2a3a;
+      margin-top: 1rem;
+      animation: fadeInUp 0.8s;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-particles"></div>
+<div class="glow-overlay"></div>
+<div class="container">
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Wazuh Installation Ultimate GUI-Guide</h1>
+    <div class="tagline">Open Source SIEM + XDR | Centralized security for Linux, Windows, Cloud</div>
+    <div class="badge-group">
+      <span class="badge"><span class="material-icons">storage</span> 100k+ agents</span>
+      <span class="badge"><span class="material-icons">insights</span> FIM / SCA / Vuln</span>
+      <span class="badge"><span class="material-icons">paid</span> $0 license</span>
+    </div>
+  </div>
+
+  <!-- Profile -->
+  <div class="profile">
+    <img class="profile-img" src="https://media.licdn.com/dms/image/v2/D4D03AQFyE2czztI6tA/profile-displayphoto-scale_400_400/B4DZwndMbNIAAg-/0/1770188491303?e=1777507200&v=beta&t=c5vt-N7LVsjb4k9TDTSQUFxu6s9xk5_8FPA2FjTWo3U" alt="Ashish Patil">
+    <div class="profile-info">
+      <h3>Ashish Patil</h3>
+      <p>Cybersecurity Professional & Hacker | Wazuh Expert</p>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3><span class="material-icons">pie_chart</span> Use‑case distribution</h3>
+      <div class="chart-container"><canvas id="pieChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3><span class="material-icons">bar_chart</span> Annual cost comparison (100 agents / 10GB/day)</h3>
+      <canvas id="barChart"></canvas>
+      <div class="cost-text">
+        Wazuh: $0 | Splunk: ~$18k | Sentinel: ~$9k | QRadar: $9.6k | Elastic: $3.2k
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= WINDOWS SECTION ================= -->
+  <div class="section-headline headline-windows">
+    <span class="material-icons">devices</span> Windows Agent
+  </div>
+  <div class="grid">
+    <div class="card card-windows">
+      <div class="card-header"><span class="material-icons">install_desktop</span><h3>Installation</h3></div>
+      <div class="cmd" data-copy="Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.14.4-1.msi -OutFile $env:tmp\wazuh-agent">
+        <div class="cmd-desc"><span class="material-icons">cloud_download</span> Download MSI v4.14.4</div>
+        <code>Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.14.4-1.msi -OutFile $env:tmp\wazuh-agent</code>
+      </div>
+      <div class="cmd" data-copy="msiexec.exe /i $env:tmp\wazuh-agent /q WAZUH_MANAGER='192.168.1.229' WAZUH_AGENT_NAME='DESKTOP-NAME'">
+        <div class="cmd-desc"><span class="material-icons">install_desktop</span> Silent install (set manager IP & name)</div>
+        <code>msiexec.exe /i $env:tmp\wazuh-agent /q WAZUH_MANAGER='192.168.1.229' WAZUH_AGENT_NAME='DESKTOP-NAME'</code>
+      </div>
+      <a href="https://packages.wazuh.com/4.x/windows/wazuh-agent-4.14.4-1.msi" class="btn-download" target="_blank"><span class="material-icons">cloud_download</span> Direct MSI download</a>
+    </div>
+    <div class="card card-windows">
+      <div class="card-header"><span class="material-icons">verified</span><h3>Verification</h3></div>
+      <div class="cmd" data-copy="Get-Service wazuh"><div class="cmd-desc"><span class="material-icons">info</span> Check service existence</div><code>Get-Service wazuh</code></div>
+      <div class="cmd" data-copy="Start-Service wazuh"><div class="cmd-desc"><span class="material-icons">play_arrow</span> Start service</div><code>Start-Service wazuh</code></div>
+      <div class="cmd" data-copy="Get-Content 'C:\Program Files (x86)\ossec-agent\ossec.log' -Tail 15"><div class="cmd-desc"><span class="material-icons">receipt</span> View last 15 log lines</div><code>Get-Content "C:\Program Files (x86)\ossec-agent\ossec.log" -Tail 15</code></div>
+      <div class="cmd" data-copy="& 'C:\Program Files (x86)\ossec-agent\manage_agents.exe'"><div class="cmd-desc"><span class="material-icons">key</span> Manual key import tool</div><code>& 'C:\Program Files (x86)\ossec-agent\manage_agents.exe'</code></div>
+    </div>
+    <div class="card card-windows">
+      <div class="card-header"><span class="material-icons">build</span><h3>Troubleshooting</h3></div>
+      <div class="cmd" data-copy="Restart-Service wazuh"><div class="cmd-desc"><span class="material-icons">refresh</span> Restart agent</div><code>Restart-Service wazuh</code></div>
+      <div class="cmd" data-copy="Stop-Service wazuh -Force; (Get-Content 'C:\Program Files (x86)\ossec-agent\ossec.conf') -replace '192\.168\.132\.133','192.168.1.229' | Set-Content 'C:\Program Files (x86)\ossec-agent\ossec.conf'; Start-Service wazuh">
+        <div class="cmd-desc"><span class="material-icons">swap_horiz</span> Fix wrong manager IP</div>
+        <code>Stop-Service wazuh -Force; (Get-Content "C:\Program Files (x86)\ossec-agent\ossec.conf") -replace '192\.168\.132\.133','192.168.1.229' | Set-Content "C:\Program Files (x86)\ossec-agent\ossec.conf"; Start-Service wazuh</code>
+      </div>
+      <div class="cmd" data-copy="Test-NetConnection 192.168.1.229 -Port 1514"><div class="cmd-desc"><span class="material-icons">wifi</span> Test port 1514</div><code>Test-NetConnection 192.168.1.229 -Port 1514</code></div>
+      <div class="cmd" data-copy="Test-NetConnection 192.168.1.229 -Port 1515"><div class="cmd-desc"><span class="material-icons">wifi</span> Test port 1515 (enrollment)</div><code>Test-NetConnection 192.168.1.229 -Port 1515</code></div>
+    </div>
+    <div class="card card-windows">
+      <div class="card-header"><span class="material-icons">delete_forever</span><h3>Uninstallation</h3></div>
+      <div class="cmd" data-copy="msiexec.exe /x 'C:\Program Files (x86)\ossec-agent\uninstall.exe' /quiet"><div class="cmd-desc"><span class="material-icons">uninstall</span> Silent uninstall</div><code>msiexec.exe /x "C:\Program Files (x86)\ossec-agent\uninstall.exe" /quiet</code></div>
+    </div>
+  </div>
+
+  <!-- ================= LINUX SECTION ================= -->
+  <div class="section-headline headline-linux">
+    <span class="material-icons">developer_board</span> Linux Agent (Kali / Ubuntu / Debian)
+  </div>
+  <div class="grid">
+    <div class="card card-linux">
+      <div class="card-header"><span class="material-icons">install_desktop</span><h3>Installation</h3></div>
+      <div class="cmd" data-copy="curl -so wazuh-agent.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.3-1_amd64.deb"><div class="cmd-desc"><span class="material-icons">file_download</span> Download .deb</div><code>curl -so wazuh-agent.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.3-1_amd64.deb</code></div>
+      <div class="cmd" data-copy="sudo dpkg -i wazuh-agent.deb"><div class="cmd-desc"><span class="material-icons">package</span> Install package</div><code>sudo dpkg -i wazuh-agent.deb</code></div>
+      <div class="cmd" data-copy="sudo /var/ossec/bin/manage_agents"><div class="cmd-desc"><span class="material-icons">key</span> Import key (I → paste)</div><code>sudo /var/ossec/bin/manage_agents</code></div>
+      <div class="cmd" data-copy="sudo nano /var/ossec/etc/ossec.conf"><div class="cmd-desc"><span class="material-icons">edit</span> Set manager IP in &lt;address&gt;</div><code>sudo nano /var/ossec/etc/ossec.conf</code></div>
+      <div class="cmd" data-copy="sudo systemctl enable --now wazuh-agent"><div class="cmd-desc"><span class="material-icons">power_settings_new</span> Enable & start</div><code>sudo systemctl enable --now wazuh-agent</code></div>
+      <div class="cmd" data-copy="sudo /var/ossec/bin/agent-auth -m 192.168.1.229"><div class="cmd-desc"><span class="material-icons">auto_awesome</span> Pro tip: auto-register</div><code>sudo /var/ossec/bin/agent-auth -m 192.168.1.229</code></div>
+    </div>
+    <div class="card card-linux">
+      <div class="card-header"><span class="material-icons">verified</span><h3>Verification & Fix</h3></div>
+      <div class="cmd" data-copy="sudo systemctl status wazuh-agent"><div class="cmd-desc"><span class="material-icons">info</span> Agent service status</div><code>sudo systemctl status wazuh-agent</code></div>
+      <div class="cmd" data-copy="tail -f /var/ossec/logs/ossec.log"><div class="cmd-desc"><span class="material-icons">receipt</span> Live agent log</div><code>tail -f /var/ossec/logs/ossec.log</code></div>
+      <div class="cmd" data-copy="ping 192.168.1.229"><div class="cmd-desc"><span class="material-icons">wifi</span> Test connectivity</div><code>ping 192.168.1.229</code></div>
+      <div class="cmd" data-copy="sudo /var/ossec/bin/agent_control -l"><div class="cmd-desc"><span class="material-icons">list</span> List agents (on manager)</div><code>sudo /var/ossec/bin/agent_control -l</code></div>
+    </div>
+    <div class="card card-linux">
+      <div class="card-header"><span class="material-icons">delete_forever</span><h3>Uninstallation</h3></div>
+      <div class="cmd" data-copy="sudo systemctl stop wazuh-agent"><div class="cmd-desc"><span class="material-icons">stop</span> Stop service</div><code>sudo systemctl stop wazuh-agent</code></div>
+      <div class="cmd" data-copy="sudo apt remove --purge wazuh-agent -y"><div class="cmd-desc"><span class="material-icons">uninstall</span> Remove package</div><code>sudo apt remove --purge wazuh-agent -y</code></div>
+      <div class="cmd" data-copy="sudo rm -rf /var/ossec"><div class="cmd-desc"><span class="material-icons">cleaning_services</span> Clean residual files</div><code>sudo rm -rf /var/ossec</code></div>
+    </div>
+  </div>
+
+  <!-- ================= MANAGER & CLOUD ================= -->
+  <div class="section-headline headline-teal">
+    <span class="material-icons">dns</span> Linux Manager & Cloud Deployment
+  </div>
+  <div class="grid">
+    <div class="card card-teal">
+      <div class="card-header"><span class="material-icons">dns</span><h3>Manager (Ubuntu 22.04)</h3></div>
+      <div class="cmd" data-copy="curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh"><div class="cmd-desc"><span class="material-icons">file_download</span> Download installer</div><code>curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh</code></div>
+      <div class="cmd" data-copy="sudo bash wazuh-install.sh -a -i"><div class="cmd-desc"><span class="material-icons">auto_awesome</span> All-in-one interactive</div><code>sudo bash wazuh-install.sh -a -i</code></div>
+      <div class="cmd" data-copy="sudo bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p YourStrongPass123"><div class="cmd-desc"><span class="material-icons">lock</span> Set admin password</div><code>sudo bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p YourStrongPass123</code></div>
+      <div class="cmd" data-copy="sudo systemctl status wazuh-manager wazuh-indexer wazuh-dashboard"><div class="cmd-desc"><span class="material-icons">info</span> Verify services</div><code>sudo systemctl status wazuh-manager wazuh-indexer wazuh-dashboard</code></div>
+    </div>
+    <div class="card card-teal">
+      <div class="card-header"><span class="material-icons">cloud</span><h3>Cloud (AWS) & Docker</h3></div>
+      <div class="cmd" data-copy="curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh && sudo bash wazuh-install.sh --all-in-one"><div class="cmd-desc"><span class="material-icons">cloud</span> One‑line install on EC2</div><code>curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh && sudo bash wazuh-install.sh --all-in-one</code></div>
+      <div class="cmd" data-copy="git clone https://github.com/wazuh/wazuh-docker.git"><div class="cmd-desc"><span class="material-icons">folder</span> Clone Docker repo</div><code>git clone https://github.com/wazuh/wazuh-docker.git</code></div>
+      <div class="cmd" data-copy="cd wazuh-docker/single-node && docker-compose up -d"><div class="cmd-desc"><span class="material-icons">docker</span> Start single‑node cluster</div><code>cd wazuh-docker/single-node && docker-compose up -d</code></div>
+    </div>
+  </div>
+
+  <!-- ================= DIAGNOSTICS ================= -->
+  <div class="section-headline headline-amber">
+    <span class="material-icons">terminal</span> Diagnostic Commands
+  </div>
+  <div class="grid">
+    <div class="card card-amber">
+      <div class="card-header"><span class="material-icons">terminal</span><h3>Essential Checks</h3></div>
+      <div class="cmd" data-copy="sudo /var/ossec/bin/agent_control -l"><div class="cmd-desc"><span class="material-icons">list</span> List all agents</div><code>sudo /var/ossec/bin/agent_control -l</code></div>
+      <div class="cmd" data-copy="watch -n 3 'sudo /var/ossec/bin/agent_control -l'"><div class="cmd-desc"><span class="material-icons">live_tv</span> Live refresh every 3s</div><code>watch -n 3 'sudo /var/ossec/bin/agent_control -l'</code></div>
+      <div class="cmd" data-copy="sudo ss -tulpn | grep :445"><div class="cmd-desc"><span class="material-icons">port</span> Check port 445 (SMB)</div><code>sudo ss -tulpn | grep :445</code></div>
+      <div class="cmd" data-copy="sudo nano /etc/wazuh-dashboard/opensearch_dashboards.yml"><div class="cmd-desc"><span class="material-icons">settings</span> Edit dashboard config</div><code>sudo nano /etc/wazuh-dashboard/opensearch_dashboards.yml</code></div>
+      <p><strong>Status progression:</strong> Never connected → Connected → Synchronized → Active ✅</p>
+    </div>
+    <div class="card full-width">
+      <div class="card-header"><span class="material-icons">settings_suggest</span><h3>Minimum Requirements</h3></div>
+      <table>
+        <thead><tr><th>Component</th><th>CPU</th><th>RAM</th><th>Storage</th></tr></thead>
+        <tbody>
+          <tr><td>Linux Manager (production)</td><td>8+ cores</td><td>16-32 GB</td><td>100 GB SSD</td></tr>
+          <tr><td>Windows Agent</td><td>2 cores</td><td>2 GB</td><td>10 GB</td></tr>
+          <tr><td>Linux Agent</td><td>1 core</td><td>1 GB</td><td>5 GB</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 0.8rem;"><span class="material-icons">link</span> Official docs: <a href="https://wazuh.com" target="_blank">wazuh.com</a> | GitHub: <a href="https://github.com/wazuh" target="_blank">github.com/wazuh</a></p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="material-icons">copyright</span> Ashish Patil – Cybersecurity Professional & Hacker | Click any command block to copy
+  </div>
+</div>
+
+<script>
+  // Pie chart
+  const ctxPie = document.getElementById('pieChart').getContext('2d');
+  new Chart(ctxPie, {
+    type: 'pie',
+    data: {
+      labels: ['SMEs', 'Large Enterprises', 'MSSPs', 'Gov/Defense', 'E-commerce', 'Healthcare', 'Education'],
+      datasets: [{ data: [28, 25, 18, 12, 9, 5, 3], backgroundColor: ['#1e3c72','#2c6e9e','#4f9da6','#f4a261','#e76f51','#81b29a','#e9c46a'] }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#eef2f8' } } } }
+  });
+  // Bar chart
+  const ctxBar = document.getElementById('barChart').getContext('2d');
+  new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: ['Wazuh', 'Splunk', 'Sentinel', 'QRadar', 'Elastic'],
+      datasets: [{ label: 'Annual cost (USD)', data: [0, 18000, 9000, 9600, 3200], backgroundColor: '#d64545', borderRadius: 8 }]
+    },
+    options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: true, ticks: { color: '#eef2f8' } }, x: { ticks: { color: '#eef2f8' } } }, plugins: { legend: { labels: { color: '#eef2f8' } } } }
+  });
+
+  // Click-to-copy toast
+  function showToast(msg) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-msg';
+    toast.innerHTML = `<span class="material-icons">check_circle</span> ${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+  }
+  document.querySelectorAll('.cmd').forEach(block => {
+    block.addEventListener('click', async () => {
+      let text = block.getAttribute('data-copy');
+      if (!text) text = block.innerText.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Copied!');
+      } catch(e) { showToast('Manual copy'); }
+    });
+  });
+</script>
+</body>
+</html>
