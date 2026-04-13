@@ -5,7 +5,7 @@ An **easy-to-understand, visually interactive, and practical guide** for install
 ---
 
 ## 📌 🔗 Live Project
-👉 https://YOUR_USERNAME.github.io/wazuh-ultimate-guide/
+👉 [CLick here](https://ashishpatil7507.github.io/wazuh-installation-guide/)
 
 ## 📂 🔗 GitHub Repository
 👉 https://github.com/YOUR_USERNAME/wazuh-ultimate-guide
