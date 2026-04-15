@@ -118,4 +118,4 @@ Please open an issue or pull request in the GitHub repository.
 
 ---
 
-*Made with ❤️ by Ashish Patil | Cybersecurity Architect*
+*Made by Ashish Patil | Cybersecurity Professional*
