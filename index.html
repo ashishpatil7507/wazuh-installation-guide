@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
+    /* ========== EXISTING STYLES (unchanged) ========== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
@@ -34,17 +35,9 @@
       animation: shootStar linear infinite;
     }
     @keyframes shootStar {
-      0% {
-        transform: translateX(0) translateY(0) scale(1);
-        opacity: 1;
-      }
-      70% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(-300px) translateY(200px) scale(0.2);
-        opacity: 0;
-      }
+      0% { transform: translateX(0) translateY(0) scale(1); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateX(-300px) translateY(200px) scale(0.2); opacity: 0; }
     }
     .bg-particles {
       position: fixed;
@@ -443,18 +436,71 @@
       margin-top: 1rem;
       font-size: 0.7rem;
     }
-    @media (max-width: 1200px) {
-      .grid { grid-template-columns: repeat(3, 1fr); }
-      .info-grid { grid-template-columns: repeat(2, 1fr); }
-      .firewall-grid { grid-template-columns: repeat(2, 1fr); }
+    /* ========== NEW STYLES FOR INDEXER DIAGNOSTICS CARDS (3 per row) ========== */
+    .diagnostic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
     }
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: repeat(2, 1fr); }
+    .diagnostic-card {
+      background: #14141f;
+      border-radius: 1rem;
+      padding: 0.9rem;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: 1px solid #2a2a3a;
+      cursor: pointer;
+    }
+    .diagnostic-card:hover {
+      transform: translateY(-4px);
+      border-color: #e67e22;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(230,126,34,0.3);
+    }
+    .diagnostic-card .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid #e67e22;
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .diagnostic-card .card-header .material-icons {
+      font-size: 20px;
+      color: #e67e22;
+    }
+    .diagnostic-card .cmd-desc {
+      font-size: 0.7rem;
+      color: #a0a0c0;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .diagnostic-card .cmd {
+      background: #0a0a12;
+      border-radius: 0.6rem;
+      padding: 0.5rem 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      line-height: 1.3;
+      word-break: break-word;
+      border-left: 3px solid #2a2a3a;
+      transition: all 0.2s;
+    }
+    .diagnostic-card:hover .cmd {
+      border-left-color: #e67e22;
+      background: #1a1a2a;
+    }
+    @media (max-width: 1000px) {
+      .diagnostic-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .diagnostic-grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
       .info-grid { grid-template-columns: 1fr; }
       .firewall-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr; }
     }
     .toast-msg {
       position: fixed;
@@ -490,11 +536,12 @@
     <h1>Wazuh Ultimate Installation + Custom Rules</h1>
     <div class="tagline">SIEM/XDR | Server + Agents (Win/Linux/macOS) | 70+ Custom Detection Rules (100200-102499)</div>
     <div class="badge-group">
+       <a href="https://192.168.1.214/app/login?" target="_blank" class="badge-clickable btn-doc"style="background:#1e3c72; border-color:#2c9e6e;"><span class="material-icons">storage</span> Wazuh Login</a>
       <button class="badge-clickable" id="badge-scaling"><span class="material-icons">storage</span> Scalable to 100k+ agents</button>
-      <button class="badge-clickable" id="badge-rules"><span class="material-icons">rule</span> Custom ruleset</button>
+           <button class="badge-clickable" id="badge-rules"><span class="material-icons">rule</span> Custom ruleset</button>
       <button class="badge-clickable" id="badge-tco"><span class="material-icons">paid</span> $0 license</button>
       <a href="https://documentation.wazuh.com/current/quickstart.html" target="_blank" class="btn-doc" style="background:#1e3c72; border-color:#2c9e6e;"><span class="material-icons">menu_book</span> Official Docs</a>
-    </div>
+      </div>
   </div>
 
   <a href="https://www.linkedin.com/in/ashishpatil7507/" target="_blank" class="profile-link">
@@ -521,60 +568,162 @@
       <div class="cost-text">Server: 4‑8 vCPU, 8‑16 GB RAM | Agent: 1‑2 vCPU, 1‑2 GB RAM</div>
     </div>
   </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wazuh Ultimate Guide</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a12;
+            color: #eef2f8;
+            line-height: 1.4;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        /* Wazuh Platform Showcase */
+        .platform-showcase {
+            background: #14141f;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid #2a2a3a;
+            transition: all 0.3s;
+        }
+        .platform-showcase:hover {
+            transform: translateY(-5px);
+            border-color: #d64545;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+        .video-side {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .video-side video {
+            width: 100%;
+            display: block;
+        }
+        .cards-side {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .info-mini-card {
+            background: #0a0a12;
+            border-radius: 1rem;
+            padding: 1rem;
+            border-left: 4px solid;
+            transition: all 0.2s;
+            cursor: default;
+        }
+        .info-mini-card:hover {
+            transform: translateX(5px);
+            background: #1a1a2a;
+        }
+        .info-mini-card .card-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.5rem;
+        }
+        .info-mini-card .card-icon .material-icons {
+            font-size: 24px;
+        }
+        .info-mini-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .info-mini-card p {
+            font-size: 0.75rem;
+            color: #a0a0c0;
+            margin-top: 0.3rem;
+        }
+        /* Different border colors for each card */
+        .card-core { border-left-color: #2c9e6e; }
+        .card-core .material-icons { color: #2c9e6e; }
+        .card-scale { border-left-color: #f39c12; }
+        .card-scale .material-icons { color: #f39c12; }
+        .card-security { border-left-color: #d64545; }
+        .card-security .material-icons { color: #d64545; }
 
-  <div class="section-headline headline-info"><span class="material-icons">info</span> What is Wazuh? – An Open-Source SIEM & XDR Platform</div>
-  <div class="info-grid">
-    <div class="info-card">
-      <div class="card-header"><span class="material-icons">dashboard</span> Core Capabilities</div>
-      <ul class="compact-list">
-        <li>Intrusion detection (HIDS/NIDS)</li>
-        <li>Log analysis & correlation</li>
-        <li>File integrity monitoring (FIM)</li>
-        <li>Vulnerability detection (CVE)</li>
-        <li>Security configuration assessment (SCA)</li>
-        <li>Active response (auto‑blocking)</li>
-        <li>Compliance (GDPR, HIPAA, PCI‑DSS)</li>
-      </ul>
-    </div>
-    <div class="info-card">
-      <div class="card-header"><span class="material-icons">architecture</span> Architecture</div>
-      <p>The Wazuh architecture consists of a centralized manager (Linux-based), an indexer built on OpenSearch, and a web-based dashboard for visualization. Agents run on Windows, Linux, macOS, AIX, and Solaris.</p>
-      <p style="margin-top:0.5rem;"><span class="material-icons" style="font-size:14px;">warning</span> Central components require Linux; use OVA or Docker on Windows.</p>
-    </div>
-    <div class="info-card">
-      <div class="card-header"><span class="material-icons">business_center</span> Typical Use Cases</div>
-      <ul class="compact-list">
-        <li>SMEs: Compliance (low cost)</li>
-        <li>Large Enterprises: Centralized monitoring</li>
-        <li>MSSPs: Multi‑tenant SIEM</li>
-        <li>Government/Defense: Threat Detection & File Integrity Monitoring</li>
-        <li>E‑commerce/Finance: PCI compliance</li>
-        <li>Healthcare: HIPAA ready</li>
-        <li>Education: Lightweight and Cost‑Effective</li>
-      </ul>
-    </div>
-    <div class="info-card" id="tco-card">
-      <div class="card-header"><span class="material-icons">attach_money</span> TCO & Licensing</div>
-      <p>Wazuh: $0 + operational costs.<br>Cloud SaaS: ~$571/month (100 agents).<br>Splunk: $1,500‑1,800/GB/day/year.<br>Sentinel: $2.46/GB ingested.<br>QRadar: $800/month.<br>Elastic: free tier / $0.09‑0.11 per GB.</p>
-    </div>
-    <div class="info-card" id="scaling-card">
-      <div class="card-header"><span class="material-icons">scale</span> Scaling Limits</div>
-      <ul class="compact-list">
-        <li>&lt;400 agents: single server (4‑8 vCPU, 4+ GB RAM)</li>
-        <li>400‑1000 agents: large single (32 vCPU, 64 GB RAM)</li>
-        <li>&gt;1000 agents: horizontal clustering</li>
-        <li>Indexer needs most RAM/SSD</li>
-      </ul>
-    </div>
-    <div class="info-card">
-      <div class="card-header"><span class="material-icons">security</span> Security if Manager Compromised</div>
-      <ul class="compact-list">
-        <li>Risks: disable rules, push malware, RCE, credential theft</li>
-        <li>Mitigations: HA deployment, strict firewall, monitor manager, rebuild from backup</li>
-      </ul>
-    </div>
-  </div>
+        @media (max-width: 900px) {
+            .showcase-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .video-side {
+                order: 1;
+            }
+            .cards-side {
+                order: 2;
+            }
+        }
 
+        /* (Add the rest of your existing CSS styles here - stars, particles, charts, etc.) */
+        /* For brevity, I'm only including the new showcase section.
+           You can merge this with your full existing CSS. */
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- ========== NEW WA ZUH SHOWCASE ========== -->
+    <div class="platform-showcase">
+        <div class="showcase-grid">
+            <!-- Left side: running video -->
+            <div class="video-side">
+                <video autoplay loop muted playsinline>
+                    <source src="https://wazuh.com/wp-content/themes/wazuh-v3/assets/images/home/wazuh-dashboard-wide.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- Right side: three compact info cards -->
+            <div class="cards-side">
+                <div class="info-mini-card card-core">
+                    <div class="card-icon">
+                        <span class="material-icons">dashboard</span>
+                        <h4>Core Capabilities</h4>
+                    </div>
+                    <p>Intrusion detection, log analysis, FIM, vulnerability detection, SCA, active response, and compliance (GDPR, HIPAA, PCI-DSS).</p>
+                </div>
+                <div class="info-mini-card card-scale">
+                    <div class="card-icon">
+                        <span class="material-icons">scale</span>
+                        <h4>Scalability</h4>
+                    </div>
+                    <p>From single server (&lt;400 agents) to horizontal clustering (1000+ agents). Indexer needs most RAM/SSD.</p>
+                </div>
+                <div class="info-mini-card card-security">
+                    <div class="card-icon">
+                        <span class="material-icons">security</span>
+                        <h4>Security & TCO</h4>
+                    </div>
+                    <p>Zero licensing cost; cloud SaaS from $571/mo (100 agents). Mitigations: HA, strict firewall, monitoring.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The rest of your content (charts, server, agents, etc.) continues here -->
+</div>
+</body>
+</html>
   <div class="section-headline headline-server"><span class="material-icons">dns</span> Wazuh Server (Ubuntu 22.04 LTS)</div>
   <div class="grid">
     <div class="card card-server">
@@ -600,13 +749,14 @@
     </div>
     <div class="card card-server">
       <div class="card-header"><span class="material-icons">install_desktop</span><h3>All-in-One Install</h3></div>
+      <a href="https://documentation.wazuh.com/current/quickstart.html" class="btn-download" target="_blank"><span class="material-icons">cloud_download</span> Latest Wazuh installation assistant </a>
       <div class="cmd" data-copy="curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh && sudo bash ./wazuh-install.sh -a"><div class="cmd-desc">Official installer (latest stable 4.x)</div><code>curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh &amp;&amp; sudo bash ./wazuh-install.sh -a</code></div>
       <div class="cmd" data-copy="sudo systemctl enable --now wazuh-manager wazuh-indexer wazuh-dashboard"><div class="cmd-desc">Enable services</div><code>sudo systemctl enable --now wazuh-manager wazuh-indexer wazuh-dashboard</code></div>
     </div>
     <div class="card card-server">
       <div class="card-header"><span class="material-icons">lock_reset</span><h3>Password Reset (Wazuh Dashboard)</h3></div>
-      <div class="cmd" data-copy="sudo /usr/share/wazuh-dashboard/bin/wazuh-passwords-tool.sh"><div class="cmd-desc">Reset all Wazuh passwords (auto‑generated for admin, kibanaserver, API users)</div><code>sudo /usr/share/wazuh-dashboard/bin/wazuh-passwords-tool.sh</code></div>
-      <div class="cmd" data-copy="sudo /usr/share/wazuh-dashboard/bin/wazuh-passwords-tool.sh -u admin -p Wazuh@2026!Secure"><div class="cmd-desc">Set custom admin password (example)</div><code>sudo /usr/share/wazuh-dashboard/bin/wazuh-passwords-tool.sh -u admin -p Wazuh@2026!Secure</code></div>
+      <div class="cmd" data-copy="sudo /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh"><div class="cmd-desc">Reset all Wazuh passwords (auto‑generated for admin, kibanaserver, API users)</div><code>sudo /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh</code></div>
+      <div class="cmd" data-copy="sudo /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p 'Admin@123#Secure'"><div class="cmd-desc">Set custom admin password (change the example password)</div><code>sudo /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p 'Admin@123#Secure'</code></div>
       <div class="cmd" data-copy="sudo systemctl restart wazuh-dashboard"><div class="cmd-desc">Restart Dashboard</div><code>sudo systemctl restart wazuh-dashboard</code></div>
       <div class="cmd" data-copy="https://YOUR_SERVER_IP"><div class="cmd-desc">Access Dashboard</div><code>https://&lt;SERVER-IP&gt;</code></div>
     </div>
@@ -615,7 +765,7 @@
   <div class="section-headline headline-deploy"><span class="material-icons">web</span> Deploy Agents via Wazuh Dashboard (GUI Method)</div>
   <div class="grid">
     <div class="card card-deploy">
-      <div class="card-header"><span class="material-icons">devices</span><h3>🪟 Windows (GUI)</h3></div>
+      <div class="card-header"><span class="material-icons">devices</span><h3> Windows (GUI)</h3></div>
       <ul class="deploy-steps">
         <li><span class="material-icons">check_circle</span> 1. Login: <code>https://&lt;SERVER-IP&gt;</code> (admin / password)</li>
         <li><span class="material-icons">check_circle</span> 2. Navigate: <strong>Agents → Deploy new agent</strong></li>
@@ -630,7 +780,7 @@
       <a href="https://packages.wazuh.com/4.x/windows/wazuh-agent-4.14.4-1.msi" class="btn-download" target="_blank"><span class="material-icons">cloud_download</span> Download MSI (latest 4.14.x)</a>
     </div>
     <div class="card card-deploy">
-      <div class="card-header"><span class="material-icons">developer_board</span><h3>🐧 Linux (GUI)</h3></div>
+      <div class="card-header"><span class="material-icons">developer_board</span><h3>Linux (GUI)</h3></div>
       <ul class="deploy-steps">
         <li><span class="material-icons">check_circle</span> 1. Dashboard → Agents → Deploy new agent → <strong>Linux</strong></li>
         <li><span class="material-icons">check_circle</span> 2. Select distro (Ubuntu/Debian/Kali/Parrot)</li>
@@ -643,7 +793,7 @@
       <div class="cmd" data-copy="curl -sO https://packages.wazuh.com/4.x/apt/wazuh-agent.deb && sudo WAZUH_MANAGER='192.168.1.229' WAZUH_AGENT_NAME='linux-agent' dpkg -i wazuh-agent.deb"><div class="cmd-desc">One‑line install command (from dashboard)</div><code>curl -sO https://packages.wazuh.com/4.x/apt/wazuh-agent.deb &amp;&amp; sudo WAZUH_MANAGER='SERVER_IP' WAZUH_AGENT_NAME='AGENT_NAME' dpkg -i wazuh-agent.deb</code></div>
     </div>
     <div class="card card-deploy">
-      <div class="card-header"><span class="material-icons">apple</span><h3>🍎 macOS (GUI)</h3></div>
+      <div class="card-header"><span class="material-icons">apple</span><h3> macOS (GUI)</h3></div>
       <ul class="deploy-steps">
         <li><span class="material-icons">check_circle</span> 1. Dashboard → Agents → Deploy new agent → <strong>macOS</strong></li>
         <li><span class="material-icons">check_circle</span> 2. Fill: Server IP, Agent Name</li>
@@ -660,7 +810,7 @@
   <div class="section-headline headline-windows"><span class="material-icons">bolt</span> Quick Install Commands (Manual Steps)</div>
   <div class="grid">
     <div class="card card-windows">
-      <div class="card-header"><span class="material-icons">devices</span><h3>🪟 Windows Agent</h3></div>
+      <div class="card-header"><span class="material-icons">devices</span><h3> Windows Agent</h3></div>
       <div class="cmd" data-copy="Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.14.4-1.msi -OutFile $env:TEMP\wazuh-agent.msi"><div class="cmd-desc">📌 Step 1: Download Agent</div><code>Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.14.4-1.msi -OutFile $env:TEMP\wazuh-agent.msi</code></div>
       <div class="cmd" data-copy="msiexec.exe /i $env:TEMP\wazuh-agent.msi /q WAZUH_MANAGER='MANAGER_IP' WAZUH_AGENT_NAME='PC-NAME'"><div class="cmd-desc">📌 Step 2: Install (Silent + Configure Manager)</div><code>msiexec.exe /i $env:TEMP\wazuh-agent.msi /q WAZUH_MANAGER="MANAGER_IP" WAZUH_AGENT_NAME="PC-NAME"</code></div>
       <div class="cmd" data-copy="net start wazuh"><div class="cmd-desc">📌 Step 3: Start Service</div><code>net start wazuh</code></div>
@@ -671,7 +821,7 @@
       <div class="cmd" data-copy="msiexec /x $env:TEMP\wazuh-agent.msi /q"><div class="cmd-desc">🗑️ Remove Agent</div><code>msiexec /x $env:TEMP\wazuh-agent.msi /q</code></div>
     </div>
     <div class="card card-linux">
-      <div class="card-header"><span class="material-icons">developer_board</span><h3>🐧 Linux Agent</h3></div>
+      <div class="card-header"><span class="material-icons">developer_board</span><h3> Linux Agent</h3></div>
       <div class="cmd" data-copy="wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.14.4-1_amd64.deb"><div class="cmd-desc">📌 Step 1: Download Agent</div><code>wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.14.4-1_amd64.deb</code></div>
       <div class="cmd" data-copy="sudo WAZUH_MANAGER='MANAGER_IP' WAZUH_AGENT_NAME='AGENT-NAME' dpkg -i ./wazuh-agent_4.14.4-1_amd64.deb"><div class="cmd-desc">📌 Step 2: Install + Configure (One-Liner)</div><code>sudo WAZUH_MANAGER='MANAGER_IP' WAZUH_AGENT_NAME='AGENT-NAME' dpkg -i ./wazuh-agent_4.14.4-1_amd64.deb</code></div>
       <div class="cmd" data-copy="sudo systemctl daemon-reexec && sudo systemctl enable --now wazuh-agent"><div class="cmd-desc">📌 Step 3: Enable & Start Agent</div><code>sudo systemctl daemon-reexec &amp;&amp; sudo systemctl enable --now wazuh-agent</code></div>
@@ -682,7 +832,7 @@
       <div class="cmd" data-copy="sudo systemctl stop wazuh-agent && sudo apt remove wazuh-agent -y && sudo rm -rf /var/ossec"><div class="cmd-desc">🗑️ Remove Agent</div><code>sudo systemctl stop wazuh-agent &amp;&amp; sudo apt remove wazuh-agent -y &amp;&amp; sudo rm -rf /var/ossec</code></div>
     </div>
     <div class="card card-macos">
-      <div class="card-header"><span class="material-icons">apple</span><h3>🍎 macOS Agent</h3></div>
+      <div class="card-header"><span class="material-icons">apple</span><h3> macOS Agent</h3></div>
       <div class="cmd" data-copy="curl -O https://packages.wazuh.com/4.x/macos/wazuh-agent-4.14.4-1.pkg"><div class="cmd-desc">📌 Step 1: Download Agent</div><code>curl -O https://packages.wazuh.com/4.x/macos/wazuh-agent-4.14.4-1.pkg</code></div>
       <div class="cmd" data-copy="sudo installer -pkg wazuh-agent-4.14.4-1.pkg -target /"><div class="cmd-desc">📌 Step 2: Install Package (may require Gatekeeper override)</div><code>sudo installer -pkg wazuh-agent-4.14.4-1.pkg -target /</code></div>
       <div class="cmd" data-copy="sudo nano /Library/Ossec/etc/ossec.conf"><div class="cmd-desc">📌 Step 3: Configure Manager IP (edit &lt;address&gt;)</div><code>sudo nano /Library/Ossec/etc/ossec.conf</code></div>
@@ -715,15 +865,15 @@
         <li>Select the agent ID (e.g., <code>001</code>)</li>
         <li>Copy the full key (looks like a long base64 string)</li>
       </ul>
-      <pre style="font-size:0.6rem;">MDAxIGthbGktbGludXggMTkyLjE2OC4xLjEwIGFiY2RlZg==</pre>
+      
       <div class="cmd" data-copy="MDAxIGthbGktbGludXggMTkyLjE2OC4xLjEwIGFiY2RlZg=="><div class="cmd-desc">Click to copy example key</div><code>MDAxIGthbGktbGludXggMTkyLjE2OC4xLjEwIGFiY2RlZg==</code></div>
     </div>
     <div class="card card-manual">
       <div class="card-header"><span class="material-icons">input</span><h3>📌 PART 3: Add Key on Agent</h3></div>
       <div class="os-group">
-        <div class="btn-os" onclick="document.getElementById('linux-import').scrollIntoView({behavior:'smooth'})"><span class="material-icons">developer_board</span> Linux</div>
-        <div class="btn-os" onclick="document.getElementById('windows-import').scrollIntoView({behavior:'smooth'})"><span class="material-icons">devices</span> Windows</div>
-        <div class="btn-os" onclick="document.getElementById('macos-import').scrollIntoView({behavior:'smooth'})"><span class="material-icons">apple</span> macOS</div>
+        <div class="btn-os"><span class="material-icons">developer_board</span> Linux</div>
+        <div class="btn-os"><span class="material-icons">devices</span> Windows</div>
+        <div class="btn-os"><span class="material-icons">apple</span> macOS</div>
       </div>
       <div id="linux-import"><div class="cmd" data-copy="sudo /var/ossec/bin/manage_agents"><div class="cmd-desc">Linux: sudo /var/ossec/bin/manage_agents → I → paste key</div><code>sudo /var/ossec/bin/manage_agents</code></div></div>
       <div id="windows-import"><div class="cmd" data-copy="& 'C:\Program Files (x86)\ossec-agent\manage_agents.exe'"><div class="cmd-desc">Windows: manage_agents.exe → I → paste key</div><code>& 'C:\Program Files (x86)\ossec-agent\manage_agents.exe'</code></div></div>
@@ -731,6 +881,11 @@
     </div>
     <div class="card card-manual">
       <div class="card-header"><span class="material-icons">replay</span><h3>📌 PART 4: Start/Restart</h3></div>
+      <div class="os-group">
+        <div class="btn-os"><span class="material-icons">developer_board</span> Linux</div>
+        <div class="btn-os"><span class="material-icons">devices</span> Windows</div>
+        <div class="btn-os"><span class="material-icons">apple</span> macOS</div>
+      </div>
       <div class="cmd" data-copy="sudo systemctl restart wazuh-agent"><div class="cmd-desc">Linux restart</div><code>sudo systemctl restart wazuh-agent</code></div>
       <div class="cmd" data-copy="net stop wazuh && net start wazuh"><div class="cmd-desc">Windows restart (Admin)</div><code>net stop wazuh &amp;&amp; net start wazuh</code></div>
       <div class="cmd" data-copy="sudo /Library/Ossec/bin/wazuh-control restart"><div class="cmd-desc">macOS restart</div><code>sudo /Library/Ossec/bin/wazuh-control restart</code></div>
@@ -751,7 +906,7 @@
     </div>
   </div>
 
-  <div class="section-headline headline-errors"><span class="material-icons">warning</span> Common Errors & Fixes (Interview Critical)</div>
+  <div class="section-headline headline-errors"><span class="material-icons">warning</span> Common Errors & Fixes</div>
   <div class="grid">
     <div class="card card-errors">
       <div class="card-header"><span class="material-icons">link_off</span><h3>Agent Never Connects</h3></div>
@@ -800,40 +955,287 @@
     </div>
   </div>
 
-  <div class="section-headline headline-rules"><span class="material-icons">rule</span> Custom Detection Rules (100200 – 102499)</div>
-  <div class="grid" style="grid-template-columns:1fr;">
-    <div class="card" style="grid-column:1/-1">
-      <div class="card-header"><span class="material-icons">code</span><h3>📜 local_rules.xml – Authentication, Malware, FIM, Persistence, Network</h3></div>
-      <p style="font-size:0.75rem;">These custom rules detect brute-force attacks (T1110), suspicious process execution from temp directories (T1059), PowerShell abuse (T1059.001), file integrity changes on critical system files, registry persistence (T1547.001), Windows Defender tampering, DNS queries to suspicious TLDs, security log clearing (T1070.001), and remote interactive logons. Copy into <code>/var/ossec/etc/rules/local_rules.xml</code> → <code>sudo systemctl restart wazuh-manager</code>.</p>
-      <pre id="xmlRulesBlock" style="max-height:300px; overflow-y:auto;"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;group name="windows,custom,authentication"&gt;
-  &lt;rule id="100200" level="5"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^4625$&lt;/field&gt;&lt;description&gt;Failed login&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="100203" level="12" frequency="8" timeframe="60"&gt;&lt;if_matched_sid&gt;100200&lt;/if_matched_sid&gt;&lt;same_source_ip/&gt;&lt;description&gt;Brute force&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="100300" level="10"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^1$&lt;/field&gt;&lt;field name="win.image"&gt;.*\\temp\\|.*\\appdata\\&lt;/field&gt;&lt;description&gt;Suspicious process location&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="100301" level="12"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^4104$&lt;/field&gt;&lt;field name="win.scriptblocktext"&gt;.*-EncodedCommand.*|.*Invoke-Expression.*&lt;/field&gt;&lt;description&gt;PowerShell abuse&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="100400" level="7"&gt;&lt;if_sid&gt;550&lt;/if_sid&gt;&lt;match&gt;^File 'C:\\Windows\\System32\\drivers\\etc\\hosts' modified&lt;/match&gt;&lt;description&gt;Hosts file modified&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="100500" level="9"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^4720$|^4732$|^4740$&lt;/field&gt;&lt;description&gt;User/group change&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="100700" level="9"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^13$&lt;/field&gt;&lt;regex&gt;.*\\CurrentVersion\\Run.*&lt;/regex&gt;&lt;description&gt;Registry autorun persistence&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="101100" level="12"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^5007$|^5010$&lt;/field&gt;&lt;description&gt;Windows Defender tampering&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="101600" level="10"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^22$&lt;/field&gt;&lt;regex&gt;.*(\.xyz|\.top|\.tk|\.ml).*&lt;/regex&gt;&lt;description&gt;Suspicious DNS TLD&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="101800" level="11"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^13$&lt;/field&gt;&lt;regex&gt;.*\\Microsoft\\Windows\\CurrentVersion\\Run.*&lt;/regex&gt;&lt;description&gt;Run key persistence&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="102000" level="12"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^1102$&lt;/field&gt;&lt;description&gt;Security log cleared&lt;/description&gt;&lt;/rule&gt;
-  &lt;rule id="102200" level="6"&gt;&lt;if_sid&gt;22301&lt;/if_sid&gt;&lt;field name="win.eventID"&gt;^4624$&lt;/field&gt;&lt;field name="win.logon.type"&gt;^10$&lt;/field&gt;&lt;description&gt;Remote interactive logon&lt;/description&gt;&lt;/rule&gt;
-&lt;/group&gt;</code></pre>
-      <div class="cmd" data-copy="sudo nano /var/ossec/etc/rules/local_rules.xml"><div class="cmd-desc">Edit rules file</div><code>sudo nano /var/ossec/etc/rules/local_rules.xml</code></div>
-      <div class="cmd" data-copy="sudo systemctl restart wazuh-manager"><div class="cmd-desc">Apply rules</div><code>sudo systemctl restart wazuh-manager</code></div>
-    </div>
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wazuh Custom Rules – Compact Cards</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a12;
+      font-family: 'Inter', sans-serif;
+      padding: 1.5rem;
+      color: #eef2f8;
+    }
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      border-left: 4px solid #c44569;
+      padding-left: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .rule-card {
+      background: #14141f;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      transition: all 0.2s;
+      border: 1px solid #2a2a3a;
+      cursor: default;
+    }
+    .rule-card:hover {
+      transform: translateY(-3px);
+      border-color: #c44569;
+      background: #1a1a2a;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #c44569;
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .card-header .material-icons {
+      font-size: 20px;
+      color: #c44569;
+    }
+    .rule-list {
+      list-style: none;
+      margin-top: 0.3rem;
+    }
+    .rule-list li {
+      font-size: 0.7rem;
+      line-height: 1.3;
+      margin-bottom: 0.25rem;
+      color: #c0c0d0;
+      display: flex;
+      gap: 6px;
+    }
+    .rule-id {
+      font-family: monospace;
+      font-weight: 600;
+      color: #e6a017;
+      min-width: 55px;
+    }
+    .rule-desc {
+      color: #eef2f8;
+    }
+    @media (max-width: 650px) {
+      .rules-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="section-title">
+  <span class="material-icons">rule</span> Custom Detection Rules – Categories
+</div>
+
+<div class="rules-grid">
+  <!-- 1️⃣ Authentication & Access Control -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">lock</span> Authentication & Access Control</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">100200</span><span class="rule-desc">Windows failed login (4625)</span></li>
+      <li><span class="rule-id">100201</span><span class="rule-desc">SSH failed login</span></li>
+      <li><span class="rule-id">100202</span><span class="rule-desc">Windows successful login (4624)</span></li>
+      <li><span class="rule-id">100203</span><span class="rule-desc">Brute force (8+ failures / 60s)</span></li>
+      <li><span class="rule-id">100204</span><span class="rule-desc">Windows account lockout (4740)</span></li>
+      <li><span class="rule-id">100205</span><span class="rule-desc">Privilege escalation (admin login, 4672)</span></li>
+      <li><span class="rule-id">102200</span><span class="rule-desc">RDP login detected (logon type 10)</span></li>
+      <li><span class="rule-id">100206</span><span class="rule-desc">SSH successful login</span></li>
+      <li><span class="rule-id">100207</span><span class="rule-desc">SSH invalid user attempt</span></li>
+    </ul>
   </div>
 
-  <div class="section-headline headline-server"><span class="material-icons">build</span> Diagnostics & Complete Server Removal</div>
+  <!-- 2️⃣ User & Group Management -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">group</span> User & Group Management</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">100500</span><span class="rule-desc">User account created (4720)</span></li>
+      <li><span class="rule-id">100501</span><span class="rule-desc">User account deleted (4726)</span></li>
+      <li><span class="rule-id">100502</span><span class="rule-desc">Password change/reset (4723/4724)</span></li>
+      <li><span class="rule-id">100503</span><span class="rule-desc">User added to security group (4728/4732/4756)</span></li>
+      <li><span class="rule-id">100504</span><span class="rule-desc">Admin privilege assigned (4732 + "Administrators")</span></li>
+      <li><span class="rule-id">100505</span><span class="rule-desc">Suspicious account creation with plaintext password</span></li>
+    </ul>
+  </div>
+
+  <!-- 3️⃣ Process Execution & Malware Detection -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">memory</span> Process Execution & Malware</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">100300</span><span class="rule-desc">Suspicious process location (Temp/AppData)</span></li>
+      <li><span class="rule-id">100301</span><span class="rule-desc">Suspicious parent‑child relationship</span></li>
+      <li><span class="rule-id">100302</span><span class="rule-desc">Unknown binary created/modified (FIM)</span></li>
+      <li><span class="rule-id">100303</span><span class="rule-desc">Potential reverse shell (nc, bash -i, etc.)</span></li>
+      <li><span class="rule-id">100304</span><span class="rule-desc">Encoded command execution (-EncodedCommand, base64)</span></li>
+      <li><span class="rule-id">100305</span><span class="rule-desc">LOLBin abuse (wmic, rundll32, mshta, regsvr32)</span></li>
+    </ul>
+  </div>
+
+  <!-- 4️⃣ PowerShell & Script Abuse -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">terminal</span> PowerShell & Script Abuse</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">100400</span><span class="rule-desc">PowerShell EncodedCommand usage</span></li>
+      <li><span class="rule-id">100401</span><span class="rule-desc">PowerShell Invoke‑Expression / IEX usage</span></li>
+      <li><span class="rule-id">100402</span><span class="rule-desc">PowerShell downloading content (DownloadString, WebClient)</span></li>
+      <li><span class="rule-id">100403</span><span class="rule-desc">General PowerShell script execution (4104)</span></li>
+      <li><span class="rule-id">100404</span><span class="rule-desc">Suspicious PowerShell obfuscation pattern</span></li>
+    </ul>
+  </div>
+
+  <!-- 5️⃣ Persistence Mechanisms -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">save</span> Persistence Mechanisms</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">100700</span><span class="rule-desc">Registry Run key modification</span></li>
+      <li><span class="rule-id">100701</span><span class="rule-desc">File added to startup folder</span></li>
+      <li><span class="rule-id">100702</span><span class="rule-desc">Scheduled task creation/modification (4698‑4702)</span></li>
+      <li><span class="rule-id">100703</span><span class="rule-desc">New service installed (4697/7045)</span></li>
+      <li><span class="rule-id">100704</span><span class="rule-desc">WMI persistence (FilterToConsumerBinding, ActiveScriptEventConsumer)</span></li>
+    </ul>
+  </div>
+
+  <!-- 6️⃣ File Integrity & System Changes -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">description</span> File Integrity & System Changes</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">100400 (hosts)</span><span class="rule-desc">Hosts file modified</span></li>
+      <li><span class="rule-id">100800</span><span class="rule-desc">Critical system file changed (/etc/passwd, /etc/shadow)</span></li>
+      <li><span class="rule-id">100801</span><span class="rule-desc">Unauthorized file creation (FIM)</span></li>
+      <li><span class="rule-id">100802</span><span class="rule-desc">System binary replaced or modified (C:\Windows\System32, /usr/bin)</span></li>
+      <li><span class="rule-id">100803</span><span class="rule-desc">Potential web shell upload (via web logs)</span></li>
+    </ul>
+  </div>
+
+  <!-- 7️⃣ Windows Defender & Security Controls -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">security</span> Windows Defender & Security</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">101100</span><span class="rule-desc">Windows Defender disabled/tampered (5007)</span></li>
+      <li><span class="rule-id">101101</span><span class="rule-desc">Antivirus tampering (5007/5010)</span></li>
+      <li><span class="rule-id">101102</span><span class="rule-desc">Windows Firewall rule changed (4946‑4948)</span></li>
+      <li><span class="rule-id">101103</span><span class="rule-desc">Security/audit policy changed (4719/4907)</span></li>
+    </ul>
+  </div>
+
+  <!-- 8️⃣ Log & Audit Tampering -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">history</span> Log & Audit Tampering</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">102000</span><span class="rule-desc">Security log cleared (1102)</span></li>
+      <li><span class="rule-id">102001</span><span class="rule-desc">Audit policy changed (4719)</span></li>
+      <li><span class="rule-id">102002</span><span class="rule-desc">Windows Event Log service stopped (7036/7040)</span></li>
+      <li><span class="rule-id">102003</span><span class="rule-desc">Event log manually cleared via wevtutil cl</span></li>
+    </ul>
+  </div>
+
+  <!-- 9️⃣ Network Activity & C2 Detection -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">wifi</span> Network Activity & C2 Detection</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">101600</span><span class="rule-desc">Suspicious DNS query to high‑risk TLD (.xyz, .tk, .ml, etc.)</span></li>
+      <li><span class="rule-id">101601</span><span class="rule-desc">Connection to known malicious IP (placeholder)</span></li>
+      <li><span class="rule-id">101602</span><span class="rule-desc">Potential C2 beaconing (repeated suspicious queries)</span></li>
+      <li><span class="rule-id">101603</span><span class="rule-desc">Possible reverse shell network traffic</span></li>
+      <li><span class="rule-id">101604</span><span class="rule-desc">Port scanning behavior detected</span></li>
+    </ul>
+  </div>
+
+  <!-- 🔟 Web Attacks (VAPT) -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">public</span> Web Attacks (VAPT)</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">102100</span><span class="rule-desc">SQL injection attempt (union, select, ' or '1'='1, sleep, etc.)</span></li>
+      <li><span class="rule-id">102101</span><span class="rule-desc">Cross‑site scripting (XSS) attempt</span></li>
+      <li><span class="rule-id">102102</span><span class="rule-desc">Local/Remote file inclusion (../, file://, php://filter)</span></li>
+      <li><span class="rule-id">102103</span><span class="rule-desc">Directory traversal attempt (../, %2e%2e%2f)</span></li>
+      <li><span class="rule-id">102104</span><span class="rule-desc">Web application brute force login (POST to login/signin)</span></li>
+      <li><span class="rule-id">102105</span><span class="rule-desc">Suspicious file upload (potential web shell)</span></li>
+      <li><span class="rule-id">102106</span><span class="rule-desc">Command injection attempt (; ls, | id, cmd, $(cmd))</span></li>
+    </ul>
+  </div>
+
+  <!-- 1️⃣1️⃣ SSH Monitoring (Linux) -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">computer</span> SSH Monitoring (Linux)</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">103100</span><span class="rule-desc">SSH failed login</span></li>
+      <li><span class="rule-id">103101</span><span class="rule-desc">SSH root login failure</span></li>
+      <li><span class="rule-id">103102</span><span class="rule-desc">SSH root login success (sensitive)</span></li>
+      <li><span class="rule-id">103103</span><span class="rule-desc">SSH brute force attack (10+ failures / 60s)</span></li>
+      <li><span class="rule-id">103104</span><span class="rule-desc">SSH connection attempt with invalid username</span></li>
+    </ul>
+  </div>
+
+  <!-- 1️⃣2️⃣ Privilege Escalation (Linux & Windows) -->
+  <div class="rule-card">
+    <div class="card-header"><span class="material-icons">trending_up</span> Privilege Escalation</div>
+    <ul class="rule-list">
+      <li><span class="rule-id">104100</span><span class="rule-desc">Sudo command executed (potential privilege escalation)</span></li>
+      <li><span class="rule-id">104101</span><span class="rule-desc">Failed sudo authentication attempt</span></li>
+      <li><span class="rule-id">104102</span><span class="rule-desc">Token manipulation / admin privilege assigned (Windows, 4672)</span></li>
+      <li><span class="rule-id">104103</span><span class="rule-desc">SetUID / SetGID bit set on file (chmod 4xxx / 2xxx)</span></li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
+
+  <!-- ========== DIAGNOSTICS & COMPLETE SERVER REMOVAL ========== -->
+  <div class="section-headline headline-server"><span class="material-icons">build</span> Diagnostics & Removal</div>
   <div class="grid">
+    <!-- 🧪 AGENT DIAGNOSTICS -->
+    <div class="card card-agent">
+      <div class="card-header"><span class="material-icons">bug_report</span><h3>🧪 Diagnose Agent</h3></div>
+      <div class="cmd" data-copy="hostname -I"><div class="cmd-desc">Check agent IP address</div><code>hostname -I</code></div>
+      <div class="cmd" data-copy="ip a"><div class="cmd-desc">Detailed network interfaces</div><code>ip a</code></div>
+      <div class="cmd" data-copy="sudo systemctl status wazuh-agent"><div class="cmd-desc">Check agent status</div><code>sudo systemctl status wazuh-agent</code></div>
+      <div class="cmd" data-copy="sudo tail -f /var/ossec/logs/ossec.log"><div class="cmd-desc">View agent logs</div><code>sudo tail -f /var/ossec/logs/ossec.log</code></div>
+      <div class="cmd" data-copy="sudo nano /var/ossec/etc/ossec.conf"><div class="cmd-desc">Edit config (fix &lt;address&gt;)</div><code>sudo nano /var/ossec/etc/ossec.conf</code></div>
+      <div class="cmd" data-copy="ping &lt;MANAGER_IP&gt;"><div class="cmd-desc">Ping manager</div><code>ping &lt;MANAGER_IP&gt;</code></div>
+      <div class="cmd" data-copy="sudo /var/ossec/bin/agent-auth -m &lt;MANAGER_IP&gt;"><div class="cmd-desc">Re-register agent</div><code>sudo /var/ossec/bin/agent-auth -m &lt;MANAGER_IP&gt;</code></div>
+    </div>
+
+    <!-- 🔧 SERVER DIAGNOSTICS -->
     <div class="card card-server">
-      <div class="card-header"><span class="material-icons">healing</span><h3>🔧 Diagnostics</h3></div>
-      <div class="cmd" data-copy="sudo /var/ossec/bin/agent_control -l"><div class="cmd-desc">List agents</div><code>sudo /var/ossec/bin/agent_control -l</code></div>
+      <div class="card-header"><span class="material-icons">healing</span><h3>🔧 Diagnose Server</h3></div>
+      <div class="cmd" data-copy="sudo /var/ossec/bin/agent_control -l"><div class="cmd-desc">List all agents</div><code>sudo /var/ossec/bin/agent_control -l</code></div>
       <div class="cmd" data-copy="sudo journalctl -u wazuh-manager -f"><div class="cmd-desc">Live manager logs</div><code>sudo journalctl -u wazuh-manager -f</code></div>
       <div class="cmd" data-copy="sudo systemctl restart wazuh-manager wazuh-indexer wazuh-dashboard"><div class="cmd-desc">Restart all services</div><code>sudo systemctl restart wazuh-manager wazuh-indexer wazuh-dashboard</code></div>
-      <div class="cmd" data-copy="ss -tlnp | grep -E '1514|1515|55000|9200|9300'"><div class="cmd-desc">Check listening ports</div><code>ss -tlnp | grep -E '1514|1515|55000|9200|9300'</code></div>
+      <div class="cmd" data-copy="ss -tulnp | grep -E '1514|1515|55000|9200|9300'"><div class="cmd-desc">Check listening ports</div><code>ss -tulnp | grep -E '1514|1515|55000|9200|9300'</code></div>
     </div>
+
+    <!-- 🗑️ AGENT REMOVAL -->
+    <div class="card card-agent">
+      <div class="card-header"><span class="material-icons">person_remove</span><h3>🗑️ Agent Removal</h3></div>
+      <div class="cmd" data-copy="sudo systemctl stop wazuh-agent"><div class="cmd-desc">Stop agent service</div><code>sudo systemctl stop wazuh-agent</code></div>
+      <div class="cmd" data-copy="sudo apt remove wazuh-agent -y"><div class="cmd-desc">Uninstall Wazuh agent</div><code>sudo apt remove wazuh-agent -y</code></div>
+      <div class="cmd" data-copy="sudo apt purge wazuh-agent -y"><div class="cmd-desc">Purge agent completely</div><code>sudo apt purge wazuh-agent -y</code></div>
+      <div class="cmd" data-copy="sudo rm -rf /var/ossec"><div class="cmd-desc">Remove residual files</div><code>sudo rm -rf /var/ossec</code></div>
+      <div class="cmd" data-copy="sudo deluser wazuh"><div class="cmd-desc">Remove wazuh user (if exists)</div><code>sudo deluser wazuh</code></div>
+      <div class="cmd" data-copy="sudo delgroup wazuh"><div class="cmd-desc">Remove wazuh group (if exists)</div><code>sudo delgroup wazuh</code></div>
+      <div class="cmd" data-copy="sudo /var/ossec/bin/manage_agents"><div class="cmd-desc">Remove agent from server (interactive)</div><code>sudo /var/ossec/bin/manage_agents</code></div>
+    </div>
+
+    <!-- 🗑️ COMPLETE SERVER REMOVAL -->
     <div class="card card-server">
       <div class="card-header"><span class="material-icons">delete_forever</span><h3>🗑️ Complete Server Removal</h3></div>
       <div class="cmd" data-copy="sudo bash wazuh-install.sh -u"><div class="cmd-desc">Uninstall Wazuh</div><code>sudo bash wazuh-install.sh -u</code></div>
@@ -842,11 +1244,258 @@
     </div>
   </div>
 
-  <div class="footer">
-    <span class="material-icons">copyright</span> Ashish Patil | Wazuh SIEM Deployment & Detection Engineering Guide
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indexer Diagnostics – Compact Cards</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a12;
+      font-family: 'Inter', sans-serif;
+      padding: 1.5rem;
+      color: #eef2f8;
+    }
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      border-left: 4px solid #e67e22;
+      padding-left: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .diag-card {
+      background: #14141f;
+      border-radius: 0.8rem;
+      padding: 0.6rem;
+      transition: all 0.2s;
+      border: 1px solid #2a2a3a;
+      cursor: pointer;
+    }
+    .diag-card:hover {
+      transform: translateY(-2px);
+      border-color: #e67e22;
+      background: #1a1a2a;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid #e67e22;
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+    .card-header .material-icons {
+      font-size: 16px;
+      color: #e67e22;
+    }
+    .cmd-desc {
+      font-size: 0.6rem;
+      color: #a0a0c0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cmd-desc .material-icons {
+      font-size: 12px;
+      color: #e67e22;
+    }
+    .cmd {
+      background: #0a0a12;
+      border-radius: 0.5rem;
+      padding: 0.3rem 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.3;
+      word-break: break-word;
+      border-left: 2px solid #2a2a3a;
+      transition: all 0.2s;
+    }
+    .diag-card:hover .cmd {
+      border-left-color: #e67e22;
+      background: #0f0f18;
+    }
+    .toast-msg {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #e67e22;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 2000;
+      animation: fadeSlideUp 0.2s, fadeOut 1.8s forwards 0.3s;
+      pointer-events: none;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+    @media (max-width: 800px) {
+      .diag-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 550px) {
+      .diag-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="section-title">
+  <span class="material-icons">storage</span> 🛠️ Indexer Diagnostics (Disk/Memory) – compact
+</div>
+
+<div class="diag-grid">
+  <!-- Exact Error -->
+  <div class="diag-card" data-copy="systemctl status wazuh-indexer -l">
+    <div class="card-header"><span class="material-icons">bug_report</span> Step 1: Exact Error</div>
+    <div class="cmd-desc"><span class="material-icons">info</span> Detailed service status</div>
+    <div class="cmd">systemctl status wazuh-indexer -l</div>
+  </div>
+  <div class="diag-card" data-copy="journalctl -xeu wazuh-indexer.service | tail -30">
+    <div class="card-header"><span class="material-icons">article</span> Journal Logs</div>
+    <div class="cmd-desc"><span class="material-icons">schedule</span> Last 30 journal lines</div>
+    <div class="cmd">journalctl -xeu wazuh-indexer.service | tail -30</div>
+  </div>
+  <div class="diag-card" data-copy="tail -n 50 /var/log/wazuh-indexer/wazuh-indexer.log">
+    <div class="card-header"><span class="material-icons">receipt</span> Indexer Logs</div>
+    <div class="cmd-desc"><span class="material-icons">search</span> Indexer logs (real cause)</div>
+    <div class="cmd">tail -n 50 /var/log/wazuh-indexer/wazuh-indexer.log</div>
+  </div>
+
+  <!-- Memory / Disk -->
+  <div class="diag-card" data-copy="free -h">
+    <div class="card-header"><span class="material-icons">memory</span> Memory Check</div>
+    <div class="cmd-desc"><span class="material-icons">dashboard</span> RAM & swap usage</div>
+    <div class="cmd">free -h</div>
+  </div>
+  <div class="diag-card" data-copy="df -h">
+    <div class="card-header"><span class="material-icons">storage</span> Disk Usage</div>
+    <div class="cmd-desc"><span class="material-icons">warning</span> Disk usage (root full?)</div>
+    <div class="cmd">df -h</div>
+  </div>
+  <div class="diag-card" data-copy="du -h --max-depth=1 / | sort -hr | head -n 10">
+    <div class="card-header"><span class="material-icons">folder</span> Largest Folders</div>
+    <div class="cmd-desc"><span class="material-icons">sort</span> Find largest folders</div>
+    <div class="cmd">du -h --max-depth=1 / | sort -hr | head -n 10</div>
+  </div>
+  <div class="diag-card" data-copy="du -sh /var/log/wazuh-indexer /var/lib/wazuh-indexer">
+    <div class="card-header"><span class="material-icons">data_usage</span> Wazuh Data</div>
+    <div class="cmd-desc"><span class="material-icons">folder_special</span> Wazuh data usage</div>
+    <div class="cmd">du -sh /var/log/wazuh-indexer /var/lib/wazuh-indexer</div>
+  </div>
+
+  <!-- Cleanup -->
+  <div class="diag-card" data-copy="journalctl --vacuum-time=2d">
+    <div class="card-header"><span class="material-icons">cleaning_services</span> Vacuum Journals</div>
+    <div class="cmd-desc"><span class="material-icons">timer</span> Vacuum journals (keep 2 days)</div>
+    <div class="cmd">journalctl --vacuum-time=2d</div>
+  </div>
+  <div class="diag-card" data-copy="rm -rf /var/log/*.gz /var/log/*.[0-9]">
+    <div class="card-header"><span class="material-icons">delete_sweep</span> Remove Rotated Logs</div>
+    <div class="cmd-desc"><span class="material-icons">archive</span> Remove rotated logs</div>
+    <div class="cmd">rm -rf /var/log/*.gz /var/log/*.[0-9]</div>
+  </div>
+  <div class="diag-card" data-copy="apt clean && apt autoremove -y">
+    <div class="card-header"><span class="material-icons">cleaning_services</span> Clean APT Cache</div>
+    <div class="cmd-desc"><span class="material-icons">cached</span> Clean apt cache</div>
+    <div class="cmd">apt clean && apt autoremove -y</div>
+  </div>
+  <div class="diag-card" data-copy="truncate -s 0 /var/log/wazuh-indexer/*.log">
+    <div class="card-header"><span class="material-icons">text_fields</span> Truncate Logs</div>
+    <div class="cmd-desc"><span class="material-icons">edit</span> Truncate indexer logs</div>
+    <div class="cmd">truncate -s 0 /var/log/wazuh-indexer/*.log</div>
+  </div>
+
+  <!-- Fixes -->
+  <div class="diag-card" data-copy="sysctl -w vm.max_map_count=262144 && echo 'vm.max_map_count=262144' >> /etc/sysctl.conf">
+    <div class="card-header"><span class="material-icons">settings</span> Kernel Parameter</div>
+    <div class="cmd-desc"><span class="material-icons">memory</span> Kernel parameter (bootstrap check)</div>
+    <div class="cmd">sysctl -w vm.max_map_count=262144 && echo 'vm.max_map_count=262144' >> /etc/sysctl.conf</div>
+  </div>
+  <div class="diag-card" data-copy="nano /etc/wazuh-indexer/jvm.options">
+    <div class="card-header"><span class="material-icons">edit</span> Edit JVM Heap</div>
+    <div class="cmd-desc"><span class="material-icons">speed</span> Edit JVM heap (change -Xms1g/-Xmx1g to -Xms512m/-Xmx512m)</div>
+    <div class="cmd">nano /etc/wazuh-indexer/jvm.options</div>
+  </div>
+  <div class="diag-card" data-copy="fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile">
+    <div class="card-header"><span class="material-icons">swap_horiz</span> Add Swap</div>
+    <div class="cmd-desc"><span class="material-icons">memory</span> Add 2GB swap (needs free disk)</div>
+    <div class="cmd">fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile</div>
+  </div>
+  <div class="diag-card" data-copy="chown -R wazuh-indexer:wazuh-indexer /var/lib/wazuh-indexer /var/log/wazuh-indexer">
+    <div class="card-header"><span class="material-icons">lock</span> Fix Permissions</div>
+    <div class="cmd-desc"><span class="material-icons">security</span> Fix permissions</div>
+    <div class="cmd">chown -R wazuh-indexer:wazuh-indexer /var/lib/wazuh-indexer /var/log/wazuh-indexer</div>
+  </div>
+  <div class="diag-card" data-copy="ss -tulnp | grep -E '9200|9300'">
+    <div class="card-header"><span class="material-icons">port</span> Port Conflicts</div>
+    <div class="cmd-desc"><span class="material-icons">wifi</span> Check port conflicts</div>
+    <div class="cmd">ss -tulnp | grep -E '9200|9300'</div>
+  </div>
+  <div class="diag-card" data-copy="systemctl restart wazuh-indexer">
+    <div class="card-header"><span class="material-icons">restart_alt</span> Restart Service</div>
+    <div class="cmd-desc"><span class="material-icons">autorenew</span> Restart after fixes</div>
+    <div class="cmd">systemctl restart wazuh-indexer</div>
   </div>
 </div>
 
+<div style="margin-top: 0.8rem; padding: 0.5rem; background: #1a1a2a; border-radius: 0.8rem; font-size: 0.7rem; border-left: 3px solid #e67e22;">
+  <span class="material-icons" style="font-size: 14px; vertical-align: middle;">lightbulb</span> 💡 If disk full → expand EBS volume or clean up. Small EC2 instances often need swap + vm.max_map_count.
+</div>
+
+<script>
+  function showToast(msg) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-msg';
+    toast.innerHTML = `<span class="material-icons" style="font-size:14px;">check_circle</span> ${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+  }
+
+  document.querySelectorAll('.diag-card').forEach(card => {
+    card.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      let text = card.getAttribute('data-copy');
+      if (!text) {
+        const cmdElem = card.querySelector('.cmd');
+        if (cmdElem) text = cmdElem.innerText.trim();
+      }
+      if (text) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast('Copied!');
+        } catch(err) {
+          showToast('Manual copy');
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
 <script>
   // Shooting stars
   function createStar() {
@@ -881,7 +1530,7 @@
     options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: true, ticks: { color: '#eef2f8', stepSize: 2 } }, x: { ticks: { color: '#eef2f8' } } }, plugins: { legend: { position: 'top', labels: { color: '#eef2f8', font: { size: 10 } } } } }
   });
 
-  // Clickable badges: smooth scroll
+  // Clickable badges
   document.getElementById('badge-scaling').addEventListener('click', () => {
     document.getElementById('scaling-card').scrollIntoView({ behavior: 'smooth' });
   });
@@ -901,20 +1550,23 @@
     setTimeout(() => toast.remove(), 2000);
   }
 
-  // Click-to-copy for command blocks and firewall items
-  document.querySelectorAll('.cmd, .firewall-item').forEach(block => {
+  // Click-to-copy for all command elements (cmd, firewall-item, diagnostic-card)
+  document.querySelectorAll('.cmd, .firewall-item, .diagnostic-card').forEach(block => {
     block.addEventListener('click', async (e) => {
       e.stopPropagation();
       let text = block.getAttribute('data-copy');
       if (!text && block.classList.contains('firewall-item')) {
         text = block.querySelector('.firewall-cmd')?.innerText.trim();
       }
+      if (!text && block.classList.contains('diagnostic-card')) {
+        text = block.querySelector('.cmd')?.innerText.trim();
+      }
       if (!text) text = block.innerText.trim();
       try { await navigator.clipboard.writeText(text); showToast('Copied!'); } catch(e) { showToast('Manual copy'); }
     });
   });
 
-  // XML block click-to-copy (entire pre content)
+  // XML block copy
   const xmlPre = document.querySelector('#xmlRulesBlock');
   if (xmlPre) {
     xmlPre.addEventListener('click', async () => {
